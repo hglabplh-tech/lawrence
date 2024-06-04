@@ -91,4 +91,7 @@ Lawrence (example above but as infix)
   (:+ $1 $3)) ;; here a addition is defined (infix) code: 5 + 3 - so the first and the third
   ;; placements defines variables -> $1 $3
   ```
-#### The structure of a rule  
+#### The structure of a rule 
+
+
+### Some code examples how to call lawrence and test it direct or generate a specialized parser
