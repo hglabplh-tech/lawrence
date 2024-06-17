@@ -53,3 +53,4 @@
   ;;(should-accept goptional (list [:bar]) :absent)
   (should-accept goptional (list [:bar] [:foo]) :present))
 
+(run-all-tests)

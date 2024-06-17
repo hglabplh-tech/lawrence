@@ -1,17 +1,17 @@
 (ns active.lawrence.grammar-test
   (:require [active.lawrence.grammar :refer :all]
-  [clojure.test :as t]
-  [core :as sut]))
+  [clojure.test :refer :all]
+  ))
 
-(t/deftest grammar-g00
-  (t/testing "little grammar test"
+(deftest grammar-g00
+  (testing "little grammar test"
 (define-grammar g00
   (:l)
   S
   ((S ((:l) $1))))
 ))
-(t/deftest grammar-g00
-           (t/testing "little grammar test"
+(deftest grammar-g00
+           (testing "little grammar test"
 (define-grammar g08
   (:l :r)
   S
@@ -21,7 +21,7 @@
       ((:l :r) $1))))
 
                       ))
-(run-tests)
+
 ; Constant arithmetic expressions
 
 (define-grammar g10
@@ -93,4 +93,4 @@
   ((S ((:bar O) $2))
    (O ((:foo) :present)
       (() :absent))))
-
+(run-all-tests)
