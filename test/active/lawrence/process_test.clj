@@ -11,40 +11,37 @@
                  ((+ char-set:digit)
                   (fn [lexeme position input input-position]
                     (make-scan-result
-                      [:decimal-symbol (Integer/parseInt lexeme) ]
+                      [:n (Integer/parseInt lexeme) ]
                       input input-position)))
                  (char-set:whitespace
                    (fn [lexeme position input input-position]
-                     (make-scan-result [:whitespace nil]
+                     (make-scan-result [:ws]
                                        input input-position)))
                  ("+"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [:+ nil]
+                     (make-scan-result [:+]
                                        input input-position)))
                  ("-"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [:- nil]
+                     (make-scan-result [:-]
                                        input input-position)))
                  ("*"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [:* nil]
+                     (make-scan-result [:*]
                                        input input-position)))
                  ("/"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [:/ nil]
+                     (make-scan-result [:/]
                                        input input-position)))
                  ("("
                    (fn [lexeme position input input-position]
-                     (make-scan-result [:l nil]
+                     (make-scan-result [:l]
                                        input input-position)))
                  (")"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [:r nil]
+                     (make-scan-result [:r]
                                        input input-position)))
-                 ("not"
-                   (fn [lexeme position input input-position]
-                     (make-scan-result [:n nil]
-                                       input input-position)))
+
                  ))
 
 (gr/define-grammar toys-are-us
@@ -61,7 +58,7 @@
                        ((:l E :r) $2)
                        ((:l :$error :r) 0))))
 (gr/define-grammar toys-are-us-ext
-                   (:+ :- :* :/ :l :r :n :decimal-symbol)
+                   (:+ :- :* :/ :l :r :n :ws)
                    E
                    ((E ((T) $1)
                        ((:$error) 0)
@@ -75,11 +72,11 @@
                        ((:l :$error :r) 0))))
 
 (deftest use-parse
-  (let [expr (list [:l]  [:+] [:r])]
+  (let [expr (list [:l] [:n 5] [:+] [:n 9] [:r])]
     (println expr)
-(parse-with-mpair toys-are-us :lr expr)))
+(parse toys-are-us :lr expr)))
 
 (deftest process-rest
   (execute-direct 'active.lawrence.process-test
                   toys-scan toys-are-us-ext
-                  "(9*5)" method-lr))
+                  "(9*5+10(7/8))" method-lr))

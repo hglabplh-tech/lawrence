@@ -12,18 +12,8 @@
   (map (fn [[t av]]
          ;;(rt/make-pair (gr/grammar-name->symbol t g)
          ;;   av
-         (gr/grammar-name->symbol t g)
-         )
-       vs))
-
-(defn input-with-mpair
-  "Convert list of [token attribute-value] vectors to input."
-  [g vs]
-  (map (fn [[t av]]
-         (rt/make-pair (gr/grammar-name->symbol t g)
-            av
-
-         ))
+         (rt/make-pair (gr/grammar-name->symbol t  g)
+         av))
        vs))
 
 
@@ -41,11 +31,7 @@
     (println cooked-input)
   (direct/parse g 1 m cooked-input)))
 
-(defn parse-with-mpair
-  [g m vs]
-  (let [cooked-input (input-with-mpair g vs)]
-    (println cooked-input)
-    (direct/parse g 1 m cooked-input)))
+
 
 (defn def-complete-scan [sym-name-space this-scanner-spec
                          input]
@@ -71,9 +57,9 @@
                       yacc-result input method]
 
 
-  (let [output (def-complete-scan sym-name-space
+  (let [output (apply list (def-complete-scan sym-name-space
                                        this-scanner-spec
-                                       input)]
+                                       input))]
 
 
 

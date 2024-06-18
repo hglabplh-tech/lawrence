@@ -11,65 +11,62 @@
 (def lang-scan (scanner-spec
                  ((+ char-set:digit)
                   (fn [lexeme position input input-position]
-                    ( (make-scan-result
-                      [(Integer/parseInt lexeme) :decimal-symbol]
+                     (make-scan-result
+                      [:decimal-symbol (Integer/parseInt lexeme)]
                       input input-position)))
                  (char-set:whitespace
                    (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :whitespace]
+                     (make-scan-result [:whitespace]
                                        input input-position)))
                  ("*"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :mul]
+                     (make-scan-result [:mul]
                                        input input-position)))
                  ("/"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :div]
+                     (make-scan-result [:div]
                                        input input-position)))
                  ("-"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :minus]
+                     (make-scan-result [:minus]
                                        input input-position)))
                  ("+"
                    (fn [lexeme position input input-position]
-                     (make-scan-result () [lexeme :plus]
+                     (make-scan-result  [:plus]
                                        input input-position)))
                  ("**"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :power]
+                     (make-scan-result [:power]
                                        input input-position)))
                  ("("
                    (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :lparen]
+                     (make-scan-result [:lparen]
                                        input input-position)))
                  (")"
                    (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :rparen]
+                     (make-scan-result [:rparen]
                                        input input-position)))
-                 ("^"
-                   (fn [lexeme position input input-position]
-                     (make-scan-result [lexeme :not]
-                                       input input-position)))))
-(def lang-grammar (gr/define-grammar
+                 ))
+(gr/define-grammar
                     calculator
-                    (list :plus :minus :mul :div :lparen :rparen
+                    (:plus :minus :mul :div :lparen :rparen
                           :not :decimal-symbol :power :whitespace)
                     expression
-                    ((expression ((expression term) $1 $2)
+                    ((expression ((expression) $1)
+                                 ((:$error) 0)
                                  ((term :plus expression) (+ $1 $3))
-                                 ((term :power expression) (+ $1 $3))
                                  ((term :minus expression) (- $1 $3)))
                      (term ((product) $1)
-                           ((term :mul term) (* $1 $3))
+                           ((product :mul term) (* $1 $3))
                            ((product :div term) (/ $1 $3)))
-                     (product ((:not) $1)
-                              ((:decimal-symbol) $1)
+                     (product ((:decimal-symbol) $1)
                               ((:lparen
-                                 expression :rparen) $2))
+                                 expression :rparen) $2)
+                              ((:lparen :$error :rparen) 0))
 
-                     )))
+                     ))
 (execute-direct 'active.lawrence.functional-test
                 lang-scan calculator
-             "(9 * 5)" method-slr)
+             "(9 * 5)" method-lr)
 ;;(parse calculator :lr input)
 
