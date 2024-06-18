@@ -10,8 +10,6 @@
   "Convert list of [token attribute-value] vectors to input."
   [g vs]
   (map (fn [[t av]]
-         ;;(rt/make-pair (gr/grammar-name->symbol t g)
-         ;;   av
          (rt/make-pair (gr/grammar-name->symbol t  g)
          av))
        vs))
@@ -22,8 +20,6 @@
   (binding [*ns* (find-ns sym-name-space)]
     (eval (scanner->expression scanner))))
 
-(def method-lr :lr)
-(def method-slr :slr)
 
 (defn parse
   [g m vs]
@@ -46,10 +42,7 @@
          (scan-to-list
         scan-one
         (string->list input)
-        (make-position 1 0))
-    ]
-    (println  "Scan Result output: ")
-    (println  (first scan-result))
+        (make-position 1 0))]
     (first scan-result)) )
 
 
@@ -63,7 +56,7 @@
 
 
 
-    (println  "Scan Result: ")
+    (println  "Scan Result output: ")
     (println  output)
     (parse yacc-result method  output                           ;;(first scan-result)
                                       ))

@@ -70,13 +70,25 @@
                     (P ((:n) $1)
                        ((:l E :r) $2)
                        ((:l :$error :r) 0))))
+(defn should-accept-list-data
+  [g vs res]
+  (is (= res (parse g :lr vs)))
+  (is (= res (parse g :slr vs))))
 
+(defn should-accept-string-data
+  [pkg-sym scan-spec grammar data res]
+  (is (= res (execute-direct pkg-sym
+                             scan-spec grammar
+                             data :lr)))
+  (is (= res (execute-direct pkg-sym
+                             scan-spec grammar
+                             data :slr))))
 (deftest use-parse
   (let [expr (list [:l] [:n 5] [:+] [:n 9] [:r])]
     (println expr)
-(parse toys-are-us :lr expr)))
+(should-accept-list-data toys-are-us  expr 14)))
 
 (deftest process-rest
-  (execute-direct 'active.lawrence.process-test
+  (should-accept-string-data 'active.lawrence.process-test
                   toys-scan toys-are-us-ext
-                  "(9*5+10(7/8))" method-lr))
+                  "(9*5+10+(3-1))" 57))

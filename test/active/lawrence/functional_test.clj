@@ -50,9 +50,9 @@
 (gr/define-grammar
                     calculator
                     (:plus :minus :mul :div :lparen :rparen
-                          :not :decimal-symbol :power :whitespace)
+                          :not :decimal-symbol)
                     expression
-                    ((expression ((expression) $1)
+                    ((expression ((term) $1)
                                  ((:$error) 0)
                                  ((term :plus expression) (+ $1 $3))
                                  ((term :minus expression) (- $1 $3)))
@@ -65,8 +65,20 @@
                               ((:lparen :$error :rparen) 0))
 
                      ))
-(execute-direct 'active.lawrence.functional-test
-                lang-scan calculator
-             "(9 * 5)" method-lr)
-;;(parse calculator :lr input)
+
+(defn should-accept-string-data
+  [pkg-sym scan-spec grammar data res]
+  (is (= res (execute-direct pkg-sym
+                             scan-spec grammar
+                             data :lr)))
+  (is (= res (execute-direct pkg-sym
+                             scan-spec grammar
+                             data :slr))))
+(deftest do-direct
+  (should-accept-string-data 'active.lawrence.functional-test
+                 lang-scan calculator
+                 "(9*5)" 45)
+
+)
+(run-tests 'active.lawrence.functional-test)
 
