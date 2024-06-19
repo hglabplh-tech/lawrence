@@ -86,7 +86,7 @@ here a addition is defined (infix) code: 5 + 3 - so the first and the third plac
 any rule we defined ends in a defined **_terminal/ token_**.
 
 ### Some code examples how to call lawrence and test it direct or generate a specialized parser
-[Code to call lawrence parse](../test/active/lawrence/util/parse_lex_util.clj)
+[Code to call lawrence parse](https://github.com/cresh/parser/tree/main)
 
 #### **Remark :** 
 The definition of the terminals for this example is done in a scanner specification
