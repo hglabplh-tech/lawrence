@@ -12,7 +12,7 @@
 ; - the nonterminals come before the terminals
 ; - the start production is first
 
-(define-record-type grammer
+(define-record-type Grammar
   (really-make-grammar name
 		       nonterminals
 		       terminals
@@ -61,17 +61,15 @@
         number-of-symbols (+ number-of-terminals number-of-nonterminals)]
     
     (really-make-grammar name
-                         nonterminals
-                         terminals
-                         number-of-terminals
-                         number-of-symbols
-                         error
-                         start
-                         productions-by-lhs
-                         symbol->name-procedure
-                         name->symbol-procedure
-                         terminal-attribution
-                         (atom {}))))
+			 nonterminals terminals
+			 number-of-terminals
+			 number-of-symbols
+			 error start
+			 productions-by-lhs
+			 symbol->name-procedure
+			 name->symbol-procedure
+			 terminal-attribution
+			 (atom {}))))
 
 (defn grammar-fetch-property
   [grammar name proc]
@@ -107,10 +105,8 @@
        (- lhs (grammar-nonterminal-offset grammar))))
 
 (defn grammar-start-production
-  [in-grammar]
-  ;;(println (grammar-start grammar))
-  (println  in-grammar)
-  (first (grammar-productions-with-lhs (grammar-start in-grammar) in-grammar)))
+  [grammar]
+  (first (grammar-productions-with-lhs (grammar-start grammar) grammar)))
 
 (defn grammar-for-each-production
   [proc grammar]
@@ -123,7 +119,7 @@
           (proc prod))
         (recur (+ 1 i))))))
 
-(define-record-type production
+(define-record-type Production
   (make-production readable lhs rhs attribution)
   production?
   [readable production-readable

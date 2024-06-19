@@ -80,5 +80,4 @@
                  "(9*5)" 45)
 
 )
-(run-tests 'active.lawrence.functional-test)
 
