@@ -140,7 +140,33 @@ defmacro number-result
   `(make-scan-result-for-lawrence :number ,@_) .... 
 ```
 
+Here is a simple scanner definition with tese simplifying macros:
+
+```scheme
+;; scanner specification
+(def scanner-specification
+  (scanner/scanner-spec
+    ;; skip whitespace
+    (char-set/char-set:whitespace
+    (fn [_lexeme _position input input-position]
+      (scan-one input input-position)))
+
+    ;; keywords
+    ("+" (keyword-result :+))
+    ("-" (keyword-result :-))
+    ("*" (keyword-result :*))
+    ("/" (keyword-result :/))
+    ("(" (keyword-result :l))
+    (")" (keyword-result :r))
+
+    ;; numbers
+    ((+ char-set/char-set:digit) (number-result))))
+
+```
+
 A more detailed explanation by Marcus Crestani will be available later on 
 [Functional development BLOG](https://funktionale-programmierung.de)
 
+
+**_Will be continued_** ......
 
