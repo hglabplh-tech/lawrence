@@ -1,19 +1,36 @@
 ## The parser and his functionality
- - Remark if you like further explanation about left-to-right (shift - reduce parsers) look at
-the documentation of Essence:
-   
-   [S48 Essence LR Parrser Generator Documentation](https://www.s48.org/essence/doc/html/essence.html)
-- in that document there is also an general explanation about the way LR parser generators work.
+ 
+#### - for those who are interested in a better understanding of shift - reduce parser or are not familiar with it:
+
+Shift Reduce parser attempts for the construction of parse in a 
+similar manner as done in bottom-up parsing i.e. the parse tree is 
+constructed from leaves(bottom) to the root(up). 
+A more general form of the shift-reduce parser is the LR parser.
+
+##### This parser requires some data structures i.e.
+
+- _An input buffer for storing the input string._
+- _A stack for storing and accessing the production rules._
+
+Out of an article of (geeks for geeks (Author not mentioned))
+[Shift Reduce - parser compiler](https://www.geeksforgeeks.org/shift-reduce-parser-compiler/)
+
+**REMARK:** here is the documentation of Essence where also a good explanation can be found:
+ [S48 Essence LR Parser Generator Documentation](https://www.s48.org/essence/doc/html/essence.html)
+
+- in that document also the specific documentation can be found and the way the Lawrence  
+  parser generator work.
+- 
 ### Parser and history
 
 Lawrence is a implementation of an 
 LR / SLR parser generator derived from the 
 Essence parser generator written in Scheme-48.
+Written by Peter Thieman, Mike Sperber
 
 ### Definition of a context free grammer
 
-
-the same grammar in lawrence
+##### - Example of a grammar we use to explain the steps:
 
 ```scheme
 (define-grammar
@@ -37,6 +54,7 @@ the same grammar in lawrence
 ```
 
 ### The explanation of the grammars above
+
 The expressions:
 
 - define terminals
@@ -92,4 +110,37 @@ any rule we defined ends in a defined **_terminal/ token_**.
 The definition of the terminals for this example is done in a scanner specification
 written with macros from ephemerol. See the `**_de.active-group/ephemerol_**` project
 on GitHub: [**_Ephemerol_**](https://github.com/active-group/ephemerol)
+
+#### Here some code explained:
+This code is part of a project Marcus Crestani set up to simplify the call of ephemerol / lawrence in a way 
+that it is possible to call the parser directly or to generate a specialized parser in
+the context of having a given scanner spec. .
+
+- Here a base macro creating a scanner with output matching to lawrence:
+```scheme
+(defmacro make-scan-result-for-lawrence
+  [?enum ?lexeme->attribute] ...)
+```
+
+- with this definition more specialized forms can be defined:
+
+1. definition for a keyword with no parameter
+
+```scheme
+(defmacro keyword-result
+  [?enum]
+  `(make-scan-result-for-lawrence ...)) 
+```
+
+2. definition for a keyword with one parameter (e.g. a number )
+
+```scheme
+defmacro number-result
+  []
+  `(make-scan-result-for-lawrence :number ,@_) .... 
+```
+
+A more detailed explanation by Marcus Crestani will be available later on 
+[Functional development BLOG](https://funktionale-programmierung.de)
+
 
