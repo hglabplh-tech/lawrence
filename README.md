@@ -4,7 +4,7 @@ An LR parser generator for Clojure.
 
 ## Usage
 
-For the specification and reference and more see REFERENCE.md 
+For the specification and reference and more see [In the Reference](./doc/REFERENCE.md) 
 in the /doc directory of this project
 
 ## License
