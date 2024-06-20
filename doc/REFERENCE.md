@@ -32,7 +32,7 @@ Written by Peter Thieman, Mike Sperber
 
 ##### - Example of a grammar we use to explain the steps:
 
-```scheme
+```clojure
 (define-grammar
   calculator
   (:plus :minus :mul :div :lparen :rparen
@@ -58,7 +58,7 @@ Written by Peter Thieman, Mike Sperber
 The expressions:
 
 - define terminals
-```scheme 
+```clojure 
 (:+ :- :* :/ :**)
 ```
 
@@ -71,13 +71,13 @@ is the start symbol. Thjis symbol is needed by the generator to determine the st
 - The $(n) where (n) is a integer defines a variable the (n) there defines the placement of the variable inside a term
 - Example:
 Lawrence (example above but as infix)
-  ```scheme 
+  ```clojure
    ((term :plus expression) (+ $1 $3))
   ```
 here a addition is defined (infix) code: 5 + 3 - so the first and the third placements defines variables -> $1 $3
 #### The structure of a rule
 
-```scheme
+```clojure
 1. ((expression ((term) $1) 
 2.      ((:$error) 0).....))
 ```
@@ -85,17 +85,17 @@ here a addition is defined (infix) code: 5 + 3 - so the first and the third plac
 - 2: here the **_rule_** what happens in case of a parser error is defined the **_rule_** tells us that we simply go on in case of a error
 
 
- ```scheme 
+ ```clojure
   3. ((term :plus expression) (+ $1 $3)) 
   ```
 - 3: and now after we defined a **expression** by a term we define that a **term** and a **terminal**  
 
-```scheme
+```clojure
  (term ((product) $1)... )
 ```
 
 - 4: with this **_rule_** we define a **term** in final as a result of the definition of **product**
-```scheme
+```clojure
  (product ((:decimal-symbol) $1)...)
 ```
 
@@ -117,7 +117,7 @@ that it is possible to call the parser directly or to generate a specialized par
 the context of having a given scanner spec. .
 
 - Here a base macro creating a scanner with output matching to lawrence:
-```scheme
+```clojure
 (defmacro make-scan-result-for-lawrence
   [?enum ?lexeme->attribute] ...)
 ```
@@ -126,7 +126,7 @@ the context of having a given scanner spec. .
 
 1. definition for a keyword with no parameter
 
-```scheme
+```clojure
 (defmacro keyword-result
   [?enum]
   `(make-scan-result-for-lawrence ...)) 
@@ -134,7 +134,7 @@ the context of having a given scanner spec. .
 
 2. definition for a keyword with one parameter (e.g. a number )
 
-```scheme
+```clojure
 defmacro number-result
   []
   `(make-scan-result-for-lawrence :number ,@_) .... 
@@ -142,7 +142,7 @@ defmacro number-result
 
 Here is a simple scanner definition with tese simplifying macros:
 
-```scheme
+```clojure
 ;; scanner specification
 (def scanner-specification
   (scanner/scanner-spec
