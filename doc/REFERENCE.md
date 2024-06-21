@@ -167,6 +167,55 @@ Here is a simple scanner definition with tese simplifying macros:
 A more detailed explanation by Marcus Crestani will be available later on 
 [Functional development BLOG](https://funktionale-programmierung.de)
 
+### How to write code making the parser generator working
+
+```clojure
+;; here the real functionality of parse in lawrence is called
+(defn parse
+  [input]
+  (lr-parser/parse grammar 1 :slr input))
+
+;; here the scan result is given to the parser to get both connected 
+;; and to get a correct parser in cooperation with the scanner
+;; scan and parse input
+(def scan+parse
+  (comp parse scan))
+
+;; just an example to see if the whole thing is working
+(scan+parse "1+2*(65/5)")
+```
+
+And to be complete here again the scanner-generation of ephemorol
+See []() for documentation
+
+```clojure
+(defn scan
+  [input]
+  (let [scanned (scanner-run/scan-to-list scan-one (scanner-run/string->list input)
+                                          (scanner-run/make-position 1 0))
+        scan-result (first scanned)]
+    (if (scanner-run/scan-error? scan-result)
+      ;; handle scan error
+      (throw (Exception. (pr-str scanned)))
+      scan-result)))
+
+```
+
+et voila we have both connected up and running
+
+### How to store a specialized parser in connection with ephemerol on disk "blah_parser.clj"
+
+```clojure
+ (lr-parser/write-ds-parse-ns core/grammar 1 :slr
+                              
+                              ;; here the namespace as symbol
+                              'parser.generated-parser
+                              ;; the needed requiring for the generated specialized 
+                              ;; parser 
+                               '([parser.generate :refer [parse-error]])
+                               "src/parser/generated_parser.clj"))
+```
+
 
 **_Will be continued_** ......
 
